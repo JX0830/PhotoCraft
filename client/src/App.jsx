@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  Button,
+  Spinner,
+  Card,
+} from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
+import ControlNet from './ControlNet'
+
 const validationSchema = Yup.object({
   height: Yup.number()
     .required("Height is required")
@@ -21,14 +31,19 @@ const validationSchema = Yup.object({
 const App = () => {
   const [image, updateImage] = useState();
   const [loading, updateLoading] = useState();
-
+  const [isOpen, setIsOpen] = useState(false);
+  const [controlNetOptions, setControlNetOptions] = useState("Canny");
+  const toggleCard = () => {
+    setIsOpen(!isOpen);
+  };
   const formik = useFormik({
     initialValues: {
       prompt: "",
       height: 512,
       width: 512,
       guidance_scale: 7.5,
-      steps: 20,
+      steps: 50,
+      controlNetOptions: "Canny"
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -37,10 +52,14 @@ const App = () => {
   });
 
   const generate = async (formValues) => {
+    console.log(formValues);
     updateLoading(true);
-    console.log("hello");
     try {
-      const result = await axios.post("http://127.0.0.1:8000/", formValues);
+      const url = isOpen ? "http://127.0.0.1:8000/controlNet" : "http://127.0.0.1:8000/";
+      const result = await axios.post(
+        url,
+        formValues
+      );
       updateImage(result.data);
     } catch (error) {
       console.error("Error generating image:", error);
@@ -56,9 +75,12 @@ const App = () => {
   return (
     <Container>
       <Row className="mb-3">
+        <Row>
+          <h1 className="text-center">Stable Diffusion FYP</h1>
+        </Row>
         {/* Left Section */}
         <Col sm={6}>
-          <h1>Left Section</h1>
+          <h1>Input</h1>
 
           <Form onSubmit={formik.handleSubmit}>
             <Row className="mb-3">
@@ -130,6 +152,36 @@ const App = () => {
               </Col>
             </Row>
             <Row className="mb-3">
+              <Form.Group controlId="steps">
+                <Card>
+                  <Card.Header>
+                    <Button
+                      variant="link"
+                      style={{
+                        width: "100%",
+                        textAlign: "left",
+                        background: "transparent",
+                        border: "none",
+                        textDecoration: 'none',
+                      }}
+                      onClick={toggleCard}
+                    >
+                      <strong>ControlNet ({isOpen?"Enabled":"Disabled"})</strong>
+                    </Button>
+                  </Card.Header>
+                  {isOpen && (
+                    <Card.Body>
+                      {/* Your content goes here */}
+                      <ControlNet 
+                      controlNetOptions={controlNetOptions}
+                      setControlNetOptions={setControlNetOptions}
+                      formik={formik}/>
+                    </Card.Body>
+                  )}
+                </Card>
+              </Form.Group>
+            </Row>
+            <Row className="mb-3">
               <Button type="submit">Generate</Button>
             </Row>
           </Form>
@@ -137,7 +189,7 @@ const App = () => {
 
         {/* Right Section */}
         <Col sm={6}>
-          <h1>Right Section</h1>
+          <h1>Output</h1>
           <div
             style={{
               boxShadow: "lg",

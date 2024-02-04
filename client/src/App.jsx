@@ -32,7 +32,6 @@ const App = () => {
   const [image, updateImage] = useState();
   const [loading, updateLoading] = useState();
   const [isOpen, setIsOpen] = useState(false);
-  const [controlNetOptions, setControlNetOptions] = useState("Canny");
   const toggleCard = () => {
     setIsOpen(!isOpen);
   };
@@ -43,7 +42,7 @@ const App = () => {
       width: 512,
       guidance_scale: 7.5,
       steps: 50,
-      controlNetOptions: "Canny"
+      controlNetOption: "Canny"
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -173,8 +172,6 @@ const App = () => {
                     <Card.Body>
                       {/* Your content goes here */}
                       <ControlNet 
-                      controlNetOptions={controlNetOptions}
-                      setControlNetOptions={setControlNetOptions}
                       formik={formik}/>
                     </Card.Body>
                   )}

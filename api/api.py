@@ -1,5 +1,5 @@
 from auth_token import auth_token
-from fastapi import FastAPI, Response, UploadFile, File
+from fastapi import FastAPI, Response, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 import torch
 from pydantic import BaseModel
@@ -35,7 +35,7 @@ class FormValues(BaseModel):
     width: int
     guidance_scale: float
     steps: int
-    controlNetOptions: str
+    controlNetOption: str
 
 @app.post("/")
 async def generate(formValues: FormValues): 
@@ -60,32 +60,15 @@ async def generate(formValues: FormValues):
 async def controlNetGenerate(formValues: FormValues): 
     print(formValues)
     image = load_image(
-    "controlNet_image\controlNet_1.png"
+    "controlNet_image\controlNet_2.png"
     )
-    controlNet_image=image
     controlNet_str="lllyasviel/sd-controlnet-canny"
-    if(formValues.controlNetOptions=="Canny"):
-        image = np.array(image)
-
-        low_threshold = 100
-        high_threshold = 200
-
-        image = cv2.Canny(image, low_threshold, high_threshold)
-        image = image[:, :, None]
-        image = np.concatenate([image, image, image], axis=2)
-        controlNet_image = Image.fromarray(image)
-    elif(formValues.controlNetOptions=="OpenPose"):
-        model = OpenposeDetector.from_pretrained("lllyasviel/ControlNet")
-        controlNet_image = model(image)
+    if(formValues.controlNetOption=="OpenPose"):
         controlNet_str="fusing/stable-diffusion-v1-5-controlnet-openpose"
-    elif(formValues.controlNetOptions=="Depth"):
-        depth_estimator = pipeline('depth-estimation')
-        controlNet_image = depth_estimator(image)['depth']
+    elif(formValues.controlNetOption=="Depth"):
         controlNet_str="lllyasviel/sd-controlnet-depth"
     
     controlnet = ControlNetModel.from_pretrained(controlNet_str, torch_dtype=torch.float16)
-    c_path = "controlNet_image/controlNet_2.png"
-    controlNet_image.save(c_path)
     pipe = StableDiffusionControlNetPipeline.from_pretrained(
         "runwayml/stable-diffusion-v1-5", controlnet=controlnet, torch_dtype=torch.float16
     )
@@ -96,7 +79,7 @@ async def controlNetGenerate(formValues: FormValues):
     #generator = [torch.Generator(device="cpu").manual_seed(2)] # seed number
     output = pipe(
     prompt,
-    controlNet_image,
+    image,
     negative_prompt="monochrome, lowres, bad anatomy, worst quality, low quality",
     num_inference_steps=formValues.steps,
     #generator=generator,
@@ -111,7 +94,7 @@ async def controlNetGenerate(formValues: FormValues):
 
 
 @app.post("/uploadImage")
-async def uploadImage(image: UploadFile = File(...)):
+async def uploadImage(image: UploadFile = File(...), controlNetOption: str = Form(...)):
     # Access the uploaded image
     contents = await image.read()
     
@@ -120,8 +103,33 @@ async def uploadImage(image: UploadFile = File(...)):
     with open(file_path, "wb") as f:
         f.write(contents)
 
-    print(f"Image saved successfully at {file_path}")
-    return {"message": "success"}
+    image = load_image("controlNet_image\controlNet_1.png")
+
+    if(controlNetOption=="Canny"):
+        canny_image = np.array(image)
+
+        low_threshold = 100
+        high_threshold = 200
+
+        canny_image = cv2.Canny(canny_image, low_threshold, high_threshold)
+        canny_image = canny_image[:, :, None]
+        canny_image = np.concatenate([canny_image, canny_image, canny_image], axis=2)
+        controlNet_image = Image.fromarray(canny_image)
+
+    elif(controlNetOption=="OpenPose"):
+        model = OpenposeDetector.from_pretrained("lllyasviel/ControlNet")
+        controlNet_image = model(image)
+    elif(controlNetOption=="Depth"):
+        depth_estimator = pipeline('depth-estimation')
+        controlNet_image = depth_estimator(image)['depth']
+        
+    c_path = "controlNet_image/controlNet_2.png"
+    controlNet_image.save(c_path)
+    
+    buffer = BytesIO()
+    controlNet_image.save(buffer, format="PNG")
+    imgstr = base64.b64encode(buffer.getvalue())
+    return Response(content=imgstr, media_type="image/png")
 
 @app.get("/viewImages")
 async def viewImages():

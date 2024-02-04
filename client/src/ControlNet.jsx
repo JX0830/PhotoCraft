@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Modal, Button, Dropdown } from "react-bootstrap";
+import { Modal, Button, Dropdown, Spinner } from "react-bootstrap";
 
-const ControlNet = ({ controlNetOptions, setControlNetOptions, formik }) => {
+const ControlNet = ({ formik }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [controlNetImage, setControlNetImage] = useState();
+  const [loading, updateLoading] = useState();
   const importAll = (r) => r.keys().map(r);
   const images = importAll(
     require.context(`./images`, false, /\.(png|jpe?g|svg|webp)$/)
@@ -26,7 +28,7 @@ const ControlNet = ({ controlNetOptions, setControlNetOptions, formik }) => {
       reader.readAsDataURL(file);
 
       setSelectedFile(file);
-      uploadFile(file);
+      uploadFile(file, formik.values.controlNetOption);
     }
   };
   const handleSelectButtonClick = async () => {
@@ -38,25 +40,27 @@ const ControlNet = ({ controlNetOptions, setControlNetOptions, formik }) => {
     handleFileChange(imageFile);
     handleCloseModal();
   };
-  
 
-  const uploadFile = (file) => {
-    console.log(file);
+  const uploadFile = async (file, controlNetOption) => {
     const formData = new FormData();
     formData.append("image", file);
-
-    axios
-      .post("http://127.0.0.1:8000/uploadImage", formData)
-      .then((response) => {
-        console.log("Upload success:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error uploading image:", error);
-      });
+    formData.append("controlNetOption", controlNetOption);
+    updateLoading(true);
+  
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/uploadImage", formData);
+      setControlNetImage(response.data);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    } finally {
+      updateLoading(false);
+    }
   };
+  
 
   const handleDropdownChange = (eventKey) => {
-    formik.setFieldValue("controlNetOptions", eventKey);
+    formik.setFieldValue("controlNetOption", eventKey);
+    uploadFile(selectedFile, eventKey);
   };
 
   const handleViewImages = () => {
@@ -77,7 +81,7 @@ const ControlNet = ({ controlNetOptions, setControlNetOptions, formik }) => {
             className="text-left d-flex align-items-center justify-content-between"
             variant="success"
           >
-            {formik.values.controlNetOptions}
+            {formik.values.controlNetOption}
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
@@ -92,18 +96,39 @@ const ControlNet = ({ controlNetOptions, setControlNetOptions, formik }) => {
           Available Images
         </button>
         &nbsp;&nbsp;
-        <input type="file" accept="image/*" onChange={(e) => handleFileChange(e.target.files[0])} />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => handleFileChange(e.target.files[0])}
+        />
       </div>
+      <p>Selected Image:</p>
       {selectedFile && (
-        <div>
-          <p>Selected Image:</p>
+  <div style={{ display: "flex" }}>
+    <div style={{ boxShadow: "lg",  borderRadius: "md", height: "200px", width: "50%", overflow: "hidden" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
+      <img
+        src={previewImage}
+        alt="Preview"
+        style={{ maxWidth: "100%", maxHeight: "200px" }}
+      />
+    </div></div>
+    <div style={{ boxShadow: "lg",  borderRadius: "md", height: "200px", width: "50%", overflow: "hidden" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
+        {loading ? (
+          <Spinner animation="border" variant="primary" />
+        ) : controlNetImage ? (
           <img
-            src={previewImage}
-            alt="Preview"
-            style={{ maxWidth: "100%", maxHeight: "200px" }}
+            src={`data:image/png;base64,${controlNetImage}`}
+            alt="Generated"
+            style={{ maxWidth: "100%", maxHeight: "100%", width: "auto", height: "auto" }}
           />
-        </div>
-      )}
+        ) : null}
+      </div>
+    </div>
+  </div>
+)}
+
 
       {/* Image Modal */}
       <Modal show={showModal} onHide={handleCloseModal} size="xl">

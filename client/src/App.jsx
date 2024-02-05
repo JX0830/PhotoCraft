@@ -12,7 +12,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import ControlNet from './ControlNet'
+import ControlNet from "./ControlNet";
+import ImageBanner from "./ImageBanner";
 
 const validationSchema = Yup.object({
   height: Yup.number()
@@ -32,6 +33,11 @@ const App = () => {
   const [image, updateImage] = useState();
   const [loading, updateLoading] = useState();
   const [isOpen, setIsOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState(null);
+  const importAll = (r) => r.keys().map(r);
+  const images = importAll(
+    require.context(`./images`, false, /\.(png|jpe?g|svg|webp)$/)
+  );
   const toggleCard = () => {
     setIsOpen(!isOpen);
   };
@@ -42,7 +48,7 @@ const App = () => {
       width: 512,
       guidance_scale: 7.5,
       steps: 50,
-      controlNetOption: "Canny"
+      controlNetOption: "Canny",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -54,11 +60,10 @@ const App = () => {
     console.log(formValues);
     updateLoading(true);
     try {
-      const url = isOpen ? "http://127.0.0.1:8000/controlNet" : "http://127.0.0.1:8000/";
-      const result = await axios.post(
-        url,
-        formValues
-      );
+      const url = isOpen
+        ? "http://127.0.0.1:8000/controlNet"
+        : "http://127.0.0.1:8000/";
+      const result = await axios.post(url, formValues);
       updateImage(result.data);
     } catch (error) {
       console.error("Error generating image:", error);
@@ -73,10 +78,17 @@ const App = () => {
 
   return (
     <Container>
+      <Row>
+        <h1 className="text-center">Stable Diffusion FYP</h1>
+      </Row>
+      <Row>
+        <ImageBanner
+          previewImage={previewImage}
+          setPreviewImage={setPreviewImage}
+          setIsOpen={setIsOpen}
+        />
+      </Row>
       <Row className="mb-3">
-        <Row>
-          <h1 className="text-center">Stable Diffusion FYP</h1>
-        </Row>
         {/* Left Section */}
         <Col sm={6}>
           <h1>Input</h1>
@@ -94,7 +106,7 @@ const App = () => {
                 />
               </Form.Group>
             </Row>
-            <Row className="mb-3">
+            {/* <Row className="mb-3">
               <Col>
                 <Form.Group controlId="height">
                   <Form.Label>Height:</Form.Label>
@@ -121,7 +133,7 @@ const App = () => {
                   />
                 </Form.Group>
               </Col>
-            </Row>
+            </Row> */}
             <Row className="mb-3">
               <Col>
                 <Form.Group controlId="guidance_scale">
@@ -161,25 +173,44 @@ const App = () => {
                         textAlign: "left",
                         background: "transparent",
                         border: "none",
-                        textDecoration: 'none',
+                        textDecoration: "none",
                       }}
                       onClick={toggleCard}
                     >
-                      <strong>ControlNet ({isOpen?"Enabled":"Disabled"})</strong>
+                      <strong>
+                        ControlNet ({isOpen ? "Enabled" : "Disabled"})
+                      </strong>
                     </Button>
                   </Card.Header>
                   {isOpen && (
                     <Card.Body>
                       {/* Your content goes here */}
-                      <ControlNet 
-                      formik={formik}/>
+                      <ControlNet
+                        formik={formik}
+                        images={images}
+                        previewImage={previewImage}
+                        setPreviewImage={setPreviewImage}
+                      />
                     </Card.Body>
                   )}
                 </Card>
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Button type="submit">Generate</Button>
+              <Button
+                type="submit"
+                style={{ height: "40px" }} // Set your desired fixed size
+              >
+                {loading ? (
+                  <Spinner
+                    animation="border"
+                    variant="light"
+                    style={{ width: "1.5rem", height: "1.5rem" }}
+                  />
+                ) : (
+                  "Generate"
+                )}
+              </Button>
             </Row>
           </Form>
         </Col>

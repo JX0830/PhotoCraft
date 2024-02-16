@@ -70,7 +70,7 @@ async def controlNetGenerate(formValues: FormValues):
     
     controlnet = ControlNetModel.from_pretrained(controlNet_str, torch_dtype=torch.float16)
     pipe = StableDiffusionControlNetPipeline.from_pretrained(
-        "runwayml/stable-diffusion-v1-5", controlnet=controlnet, torch_dtype=torch.float16
+        "SG161222/Realistic_Vision_V5.1_noVAE", use_safetensors=True,controlnet=controlnet, torch_dtype=torch.float16,
     )
     pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
     pipe.enable_model_cpu_offload()

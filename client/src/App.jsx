@@ -14,6 +14,8 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ControlNet from "./ControlNet";
 import ImageBanner from "./ImageBanner";
+import PromptStyle from "./PromptStyle";
+import "./App.css";
 
 const validationSchema = Yup.object({
   height: Yup.number()
@@ -78,35 +80,41 @@ const App = () => {
 
   return (
     <Container>
-      <Row>
-        <h1 className="text-center">Stable Diffusion FYP</h1>
-      </Row>
-      <Row>
-        <ImageBanner
-          previewImage={previewImage}
-          setPreviewImage={setPreviewImage}
-          setIsOpen={setIsOpen}
-        />
-      </Row>
-      <Row className="mb-3">
-        {/* Left Section */}
-        <Col sm={6}>
-          <h1>Input</h1>
+      <div style={{ minWidth: "1000px" }}>
+        <br />
+        <Row>
+          <h1 className="text-center">Stable Diffusion FYP</h1>
+        </Row>
+        <Row className="mb-3">
+          <ImageBanner
+            previewImage={previewImage}
+            setPreviewImage={setPreviewImage}
+            setIsOpen={setIsOpen}
+            loading={loading}
+          />
+        </Row>
+        <Row className="mb-3 justify-content-center">
+          <PromptStyle formik={formik} />
+        </Row>
+        <Row className="mb-3">
+          {/* Left Section */}
+          <Col sm={6}>
+            <h1>Input</h1>
 
-          <Form onSubmit={formik.handleSubmit}>
-            <Row className="mb-3">
-              <Form.Group controlId="prompt">
-                <Form.Label>Prompt:</Form.Label>
-                <Form.Control
-                  type="text"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.prompt}
-                  width={"350px"}
-                />
-              </Form.Group>
-            </Row>
-            {/* <Row className="mb-3">
+            <Form onSubmit={formik.handleSubmit}>
+              <Row className="mb-3">
+                <Form.Group controlId="prompt">
+                  <Form.Label>Prompt:</Form.Label>
+                  <Form.Control
+                    as="textarea" // Change type to textarea
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.prompt}
+                    rows={4} // Specify the number of visible rows // Apply width styling
+                  />
+                </Form.Group>
+              </Row>
+              {/* <Row className="mb-3">
               <Col>
                 <Form.Group controlId="height">
                   <Form.Label>Height:</Form.Label>
@@ -134,126 +142,129 @@ const App = () => {
                 </Form.Group>
               </Col>
             </Row> */}
-            <Row className="mb-3">
-              <Col>
-                <Form.Group controlId="guidance_scale">
-                  <Form.Label>Guidance Scale:</Form.Label>
-                  <Form.Control
-                    type="number"
-                    step="0.1"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.guidance_scale}
-                    width={"100px"}
-                  />
-                </Form.Group>
-              </Col>
-              <Col>
+              <Row className="mb-3">
+                <Col>
+                  <Form.Group controlId="guidance_scale">
+                    <Form.Label>Guidance Scale:</Form.Label>
+                    <Form.Control
+                      type="number"
+                      step="0.1"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.guidance_scale}
+                      width={"100px"}
+                    />
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="steps">
+                    <Form.Label>Steps:</Form.Label>
+                    <Form.Control
+                      type="number"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.steps}
+                      width={"100px"}
+                      min={10}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row className="mb-3">
                 <Form.Group controlId="steps">
-                  <Form.Label>Steps:</Form.Label>
-                  <Form.Control
-                    type="number"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.steps}
-                    width={"100px"}
-                    min={10}
-                  />
+                  <Card>
+                    <Card.Header>
+                      <Button
+                        variant="link"
+                        style={{
+                          width: "100%",
+                          textAlign: "left",
+                          background: "transparent",
+                          border: "none",
+                          textDecoration: "none",
+                        }}
+                        onClick={toggleCard}
+                      >
+                        <strong>
+                          ControlNet ({isOpen ? "Enabled" : "Disabled"})
+                        </strong>
+                      </Button>
+                    </Card.Header>
+                    {isOpen && (
+                      <Card.Body>
+                        {/* Your content goes here */}
+                        <ControlNet
+                          formik={formik}
+                          images={images}
+                          previewImage={previewImage}
+                          setPreviewImage={setPreviewImage}
+                          loading={loading}
+                        />
+                      </Card.Body>
+                    )}
+                  </Card>
                 </Form.Group>
-              </Col>
-            </Row>
-            <Row className="mb-3">
-              <Form.Group controlId="steps">
-                <Card>
-                  <Card.Header>
-                    <Button
-                      variant="link"
-                      style={{
-                        width: "100%",
-                        textAlign: "left",
-                        background: "transparent",
-                        border: "none",
-                        textDecoration: "none",
-                      }}
-                      onClick={toggleCard}
-                    >
-                      <strong>
-                        ControlNet ({isOpen ? "Enabled" : "Disabled"})
-                      </strong>
-                    </Button>
-                  </Card.Header>
-                  {isOpen && (
-                    <Card.Body>
-                      {/* Your content goes here */}
-                      <ControlNet
-                        formik={formik}
-                        images={images}
-                        previewImage={previewImage}
-                        setPreviewImage={setPreviewImage}
-                      />
-                    </Card.Body>
+              </Row>
+              <Row className="mb-3">
+                <Button
+                  type="submit"
+                  style={{ height: "40px" }} // Set your desired fixed size
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <Spinner
+                      animation="border"
+                      variant="light"
+                      style={{ width: "1.5rem", height: "1.5rem" }}
+                    />
+                  ) : (
+                    "Generate"
                   )}
-                </Card>
-              </Form.Group>
-            </Row>
-            <Row className="mb-3">
-              <Button
-                type="submit"
-                style={{ height: "40px" }} // Set your desired fixed size
-              >
-                {loading ? (
-                  <Spinner
-                    animation="border"
-                    variant="light"
-                    style={{ width: "1.5rem", height: "1.5rem" }}
-                  />
-                ) : (
-                  "Generate"
-                )}
-              </Button>
-            </Row>
-          </Form>
-        </Col>
+                </Button>
+              </Row>
+            </Form>
+          </Col>
 
-        {/* Right Section */}
-        <Col sm={6}>
-          <h1>Output</h1>
-          <div
-            style={{
-              boxShadow: "lg",
-              border: "1px solid #ccc",
-              borderRadius: "md",
-              height: "400px",
-              width: "100%",
-              overflow: "hidden", // Hide any overflow
-            }}
-          >
+          {/* Right Section */}
+          <Col sm={6}>
+            <h1>Output</h1>
             <div
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                height: "100%",
+                boxShadow: "lg",
+                border: "1px solid #ccc",
+                borderRadius: "md",
+                height: "400px",
+                width: "100%",
+                overflow: "hidden", // Hide any overflow
               }}
             >
-              {loading ? (
-                <Spinner animation="border" variant="primary" />
-              ) : image ? (
-                <img
-                  src={`data:image/png;base64,${image}`}
-                  alt="Generated"
-                  style={{
-                    maxWidth: "100%",
-                    maxHeight: "100%",
-                    width: "auto",
-                    height: "auto",
-                  }}
-                />
-              ) : null}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: "100%",
+                }}
+              >
+                {loading ? (
+                  <Spinner animation="border" variant="primary" />
+                ) : image ? (
+                  <img
+                    src={`data:image/png;base64,${image}`}
+                    alt="Generated"
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "100%",
+                      width: "auto",
+                      height: "auto",
+                    }}
+                  />
+                ) : null}
+              </div>
             </div>
-          </div>
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      </div>
     </Container>
   );
 };

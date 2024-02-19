@@ -51,8 +51,6 @@ const ControlNet = ({ formik, previewImage, setPreviewImage, loading }) => {
   }, [previewImage]);
 
   const uploadFile = async (file, controlNetOption) => {
-    console.log(file);
-    console.log(controlNetOption);
     const formData = new FormData();
     formData.append("image", file);
     formData.append("controlNetOption", controlNetOption);

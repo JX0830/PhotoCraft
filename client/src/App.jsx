@@ -74,16 +74,13 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(formik.values);
-  }, [formik.values]);
-
   return (
     <Container>
       <div style={{ minWidth: "1000px" }}>
         <br />
         <Row>
           <h1 className="text-center">Stable Diffusion FYP</h1>
+          <Button style={{ position: 'absolute', top: 30, right: 20, width:200 }}>Quick Guide</Button>
         </Row>
         <Row className="mb-3">
           <ImageBanner

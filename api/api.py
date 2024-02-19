@@ -1,5 +1,6 @@
 from auth_token import auth_token
 from fastapi import FastAPI, Response, UploadFile, File, Form
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import torch
 from pydantic import BaseModel
@@ -15,6 +16,7 @@ import cv2
 from pathlib import Path
 from controlnet_aux import OpenposeDetector
 from transformers import pipeline
+import pandas as pd
 
 app = FastAPI()
 app.add_middleware(
@@ -131,11 +133,9 @@ async def uploadImage(image: UploadFile = File(...), controlNetOption: str = For
     imgstr = base64.b64encode(buffer.getvalue())
     return Response(content=imgstr, media_type="image/png")
 
-@app.get("/viewImages")
-async def viewImages():
-    return "success"
 
-@app.post("/controlNetModel")
-async def viewImages(value: str):
-    controlNet_modal = value
-    print(value)
+@app.get("/promptStyle")
+async def read_data():
+    df = pd.read_excel("PromptStyle.xlsx")
+    data_dict = df.to_dict(orient="records")
+    return JSONResponse(content=data_dict)

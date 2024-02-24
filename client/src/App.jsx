@@ -36,6 +36,7 @@ const App = () => {
   const [loading, updateLoading] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
+  const [extraPrompt, setExtraPrompt] = useState(null);
   const importAll = (r) => r.keys().map(r);
   const images = importAll(
     require.context(`./images`, false, /\.(png|jpe?g|svg|webp)$/)
@@ -50,7 +51,7 @@ const App = () => {
       width: 512,
       guidance_scale: 7.5,
       steps: 50,
-      controlNetOption: "Canny",
+      controlNetOption: "OpenPose",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -80,7 +81,7 @@ const App = () => {
         <br />
         <Row>
           <h1 className="text-center">Stable Diffusion FYP</h1>
-          <Button style={{ position: 'absolute', top: 30, right: 20, width:200 }}>Quick Guide</Button>
+          {/* <Button style={{ position: 'absolute', top: 30, right: 20, width:200 }}>Quick Guide</Button> */}
         </Row>
         <Row className="mb-3">
           <ImageBanner
@@ -150,6 +151,7 @@ const App = () => {
                       onBlur={formik.handleBlur}
                       value={formik.values.guidance_scale}
                       width={"100px"}
+                      min={1}
                     />
                   </Form.Group>
                 </Col>

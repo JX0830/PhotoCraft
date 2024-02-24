@@ -84,8 +84,8 @@ const ControlNet = ({ formik, previewImage, setPreviewImage, loading }) => {
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
-            <Dropdown.Item eventKey="Canny">Canny</Dropdown.Item>
             <Dropdown.Item eventKey="OpenPose">OpenPose</Dropdown.Item>
+            <Dropdown.Item eventKey="Canny">Canny</Dropdown.Item>
             <Dropdown.Item eventKey="Depth">Depth</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>

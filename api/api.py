@@ -43,7 +43,7 @@ class FormValues(BaseModel):
 async def generate(formValues: FormValues): 
     print(formValues)
     device = "cuda"
-    model_id = "runwayml/stable-diffusion-v1-5"
+    model_id = "SG161222/Realistic_Vision_V5.1_noVAE"
     pipe = StableDiffusionPipeline.from_pretrained(model_id, revision="fp16", torch_dtype=torch.float16, use_auth_token=auth_token)
     pipe.to(device)
     with autocast(device): 
@@ -82,7 +82,7 @@ async def controlNetGenerate(formValues: FormValues):
     output = pipe(
     prompt,
     image,
-    negative_prompt="monochrome, lowres, bad anatomy, worst quality, low quality",
+    negative_prompt=negative_prompt,
     num_inference_steps=formValues.steps,
     #generator=generator,
     ).images[0]

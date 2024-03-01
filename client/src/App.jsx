@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import {
   Container,
   Row,
@@ -16,6 +17,7 @@ import ControlNet from "./ControlNet";
 import ImageBanner from "./ImageBanner";
 import PromptStyle from "./PromptStyle";
 import "./App.css";
+import QuickGuide from "./QuickGuide";
 
 const validationSchema = Yup.object({
   height: Yup.number()
@@ -49,7 +51,7 @@ const App = () => {
       prompt: "",
       height: 512,
       width: 512,
-      guidance_scale: 7.5,
+      guidance_scale: 7,
       steps: 50,
       controlNetOption: "OpenPose",
     },
@@ -81,7 +83,17 @@ const App = () => {
         <br />
         <Row>
           <h1 className="text-center">Stable Diffusion FYP</h1>
-          {/* <Button style={{ position: 'absolute', top: 30, right: 20, width:200 }}>Quick Guide</Button> */}
+          <Link
+            to="/quick-guide"
+            target="_blank"
+            style={{ position: "absolute", top: 30, right: 20, width: 200 }}
+          >
+            <Button
+              
+            >
+              Quick Guide
+            </Button>
+          </Link>
         </Row>
         <Row className="mb-3">
           <ImageBanner
@@ -152,12 +164,13 @@ const App = () => {
                       value={formik.values.guidance_scale}
                       width={"100px"}
                       min={1}
+                      max={30}
                     />
                   </Form.Group>
                 </Col>
                 <Col>
                   <Form.Group controlId="steps">
-                    <Form.Label>Steps:</Form.Label>
+                    <Form.Label>Sampling Steps:</Form.Label>
                     <Form.Control
                       type="number"
                       onChange={formik.handleChange}

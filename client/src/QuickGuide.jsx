@@ -33,15 +33,27 @@ const QuickGuide = () => {
           1. (OPTIONAL) Select an image, and the chosen one will be outlined
           with a blue border.
         </div>
-        <img src={image1} style={{ width: "1000px", height: "auto" }} />
+        <img
+          alt={"image"}
+          src={image1}
+          style={{ width: "1000px", height: "auto" }}
+        />
         <div>2. (OPTIONAL) Select a Style</div>
-        <img src={image2} style={{ width: "1000px", height: "auto" }} />
+        <img
+          alt={"image"}
+          src={image2}
+          style={{ width: "1000px", height: "auto" }}
+        />
         <div>
           3. The chosen style will be showcased in the prompt textbox, and you
           can continue composing the prompt with each new element separated by a
           comma (,).
         </div>
-        <img src={image3} style={{ width: "700px", height: "auto" }} />
+        <img
+          alt={"image"}
+          src={image3}
+          style={{ width: "700px", height: "auto" }}
+        />
         <div>
           4. (OPTIONAL) You can adjust the importance of each element by adding
           a plus sign (+) to increase its weight or a minus sign (-) to reduce
@@ -49,7 +61,11 @@ const QuickGuide = () => {
           specific words within parentheses to indicate their weight is for
           emphasis.
         </div>
-        <img src={image4} style={{ width: "700px", height: "auto" }} />
+        <img
+          alt={"image"}
+          src={image4}
+          style={{ width: "700px", height: "auto" }}
+        />
         <div>
           <p>
             5. (OPTIONAL) The range of guidance scales spans from 1 to 30. These
@@ -74,7 +90,11 @@ const QuickGuide = () => {
             </li>
           </ul>
         </div>
-        <img src={guidanceScale} style={{ width: "400px", height: "auto" }} />
+        <img
+          alt={"image"}
+          src={guidanceScale}
+          style={{ width: "400px", height: "auto" }}
+        />
         <div>
           6. (OPTIONAL) Sampling steps define the number of refinements applied
           to random noise for image transformation. Higher sampling steps result
@@ -84,7 +104,11 @@ const QuickGuide = () => {
           where further steps may degrade rather than enhance image quality. The
           default setting for this application is 50 steps.
         </div>
-        <img src={steps} style={{ width: "400px", height: "auto" }} />
+        <img
+          alt={"image"}
+          src={steps}
+          style={{ width: "400px", height: "auto" }}
+        />
         <div>
           7. ControlNet is a neural network integrated into Stable Diffusion to
           govern image generation by incorporating additional conditions. It
@@ -102,29 +126,41 @@ const QuickGuide = () => {
           clicking "Choose File".
         </div>
         <img
+          alt={"image"}
           src={controlnetDisabled}
           style={{ width: "400px", height: "auto", textAlign: "top" }}
         />
-        <img src={controlnet} style={{ width: "400px", height: "auto" }} />
+        <img
+          alt={"image"}
+          src={controlnet}
+          style={{ width: "400px", height: "auto" }}
+        />
         <div>
           User can choose different ControlNets by clicking the dropdown button,
           and the ControlNet image will be generated according to the selected
           ControlNet.
         </div>
-        <img src={dropdown} style={{ width: "200px", height: "auto" }} />
+        <img
+          alt={"image"}
+          src={dropdown}
+          style={{ width: "200px", height: "auto" }}
+        />
         <div>
           The images below showcase different ControlNet outputs, namely
           OpenPose, Canny, and Depth, respectively:
         </div>
         <img
+          alt={"image"}
           src={controlNet_OpenPose}
           style={{ width: "300px", height: "auto" }}
         />{" "}
         <img
+          alt={"image"}
           src={controlNet_Canny}
           style={{ width: "300px", height: "auto" }}
         />{" "}
         <img
+          alt={"image"}
           src={controlNet_Depth}
           style={{ width: "300px", height: "auto" }}
         />
@@ -132,11 +168,19 @@ const QuickGuide = () => {
           8. To proceed with image generation, click the "Generate" button
           located at the bottom of the page.
         </div>
-        <img src={generate} style={{ width: "400px", height: "auto" }} />
+        <img
+          alt={"image"}
+          src={generate}
+          style={{ width: "400px", height: "auto" }}
+        />
         <div>
           9. The generated image will be displayed in the output banner.
         </div>
-        <img src={output} style={{ width: "400px", height: "auto" }} />
+        <img
+          alt={"image"}
+          src={output}
+          style={{ width: "400px", height: "auto" }}
+        />
       </div>
     </Container>
   );

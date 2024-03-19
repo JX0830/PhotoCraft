@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Modal, Button, Dropdown, Spinner, Row, Col } from "react-bootstrap";
 
-const ControlNet = ({ formik, previewImage, setPreviewImage, loading }) => {
+const ControlNet = ({ formik, previewImage, radioValue, loading }) => {
   const [controlNetImage, setControlNetImage] = useState();
   const [controlNetLoading, updateControlNetLoading] = useState();
   const [selectedImage, setSelectdImage] = useState(null);
@@ -84,7 +84,8 @@ const ControlNet = ({ formik, previewImage, setPreviewImage, loading }) => {
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
-            <Dropdown.Item eventKey="OpenPose">OpenPose</Dropdown.Item>
+            {console.log(radioValue)}
+            {radioValue==1?<Dropdown.Item eventKey="OpenPose">OpenPose</Dropdown.Item>:""}
             <Dropdown.Item eventKey="Canny">Canny</Dropdown.Item>
             <Dropdown.Item eventKey="Depth">Depth</Dropdown.Item>
           </Dropdown.Menu>

@@ -8,6 +8,8 @@ import {
   Button,
   Spinner,
   Card,
+  ButtonGroup,
+  ToggleButton,
 } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -39,6 +41,12 @@ const App = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
   const [extraPrompt, setExtraPrompt] = useState(null);
+  const [radioValue, setRadioValue] = useState("1");
+
+  const radios = [
+    { name: "Stable Diffusion", value: "1" },
+    { name: "Stable Diffusion XL", value: "2" },
+  ];
   const importAll = (r) => r.keys().map(r);
   const images = importAll(
     require.context(`./images`, false, /\.(png|jpe?g|svg|webp)$/)
@@ -54,6 +62,7 @@ const App = () => {
       guidance_scale: 7,
       steps: 50,
       controlNetOption: "OpenPose",
+      model_id: 1,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -76,23 +85,38 @@ const App = () => {
       updateLoading(false);
     }
   };
+  const updateModelId = async (id) => {
+    setRadioValue(id);
+    formik.setFieldValue("model_id", id);
+  };
 
   return (
     <Container>
       <div style={{ minWidth: "1000px" }}>
         <br />
         <Row>
-          <h1 className="text-center">Stable Diffusion FYP</h1>
+          <ButtonGroup>
+            {radios.map((radio, idx) => (
+              <ToggleButton
+                key={idx}
+                id={`radio-${idx}`}
+                type="radio"
+                variant={"outline-light"}
+                name="radio"
+                value={radio.value}
+                checked={radioValue === radio.value}
+                onChange={(e) => updateModelId(e.currentTarget.value)}
+              >
+                {radio.name}
+              </ToggleButton>
+            ))}
+          </ButtonGroup>
           <Link
             to="/quick-guide"
             target="_blank"
             style={{ position: "absolute", top: 30, right: 20, width: 200 }}
           >
-            <Button
-              
-            >
-              Quick Guide
-            </Button>
+            <Button>Quick Guide</Button>
           </Link>
         </Row>
         <Row className="mb-3">
@@ -177,7 +201,7 @@ const App = () => {
                       onBlur={formik.handleBlur}
                       value={formik.values.steps}
                       width={"100px"}
-                      min={10}
+                      min={1}
                     />
                   </Form.Group>
                 </Col>
@@ -211,6 +235,7 @@ const App = () => {
                           previewImage={previewImage}
                           setPreviewImage={setPreviewImage}
                           loading={loading}
+                          radioValue={radioValue}
                         />
                       </Card.Body>
                     )}

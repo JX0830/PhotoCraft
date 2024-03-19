@@ -151,7 +151,7 @@ const ImageBanner = ({ previewImage, setPreviewImage, setIsOpen, loading }) => {
         transition={false}
         id="noanim-tab-example"
         className="mb-3"
-        style={{ color: "yellow", marginTop: "30px" }}
+        style={{  marginTop: "30px" }}
       >
         {tabs(
           "photo_portrait",

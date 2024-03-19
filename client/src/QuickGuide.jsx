@@ -13,6 +13,7 @@ import controlNet_Depth from "./Guides/controlNet_Depth.png";
 import controlNet_OpenPose from "./Guides/controlNet_OpenPose.png";
 import generate from "./Guides/generate.png";
 import output from "./Guides/output.png";
+import pipelines from "./Guides/pipelines.png";
 import {
   Container,
 } from "react-bootstrap";
@@ -24,20 +25,28 @@ const QuickGuide = () => {
         {/* Add pl-2 class for left padding */}
         <h1 className="text-center">QUICK GUIDE</h1>
         <div>
-          1. (OPTIONAL) Select an image, and the chosen one will be outlined
+          1. (OPTIONAL) Select a Stable Diffusion pipeline
+            <br/>
+            Stable Diffusion Pipeline: This pipeline uses models trained on 512x512 images. It's suitable for users with lower VRAM, particularly those with less than 10 VRAMs.
+            <br/>
+            Stable Diffusion XL pipline: This pipeline employs models trained on 1024x1024 images, allowing for the generation of high-resolution images. Requires more VRAM, specifically 16 VRAMs. However, more VRAMs could lead to better performance.
+            <img alt = "" src={pipelines} style={{ width: "1000px", height: "auto" }} />
+        </div>
+        <div>
+          2. (OPTIONAL) Select an image, and the chosen one will be outlined
           with a blue border.
         </div>
         <img alt = "" src={image1} style={{ width: "1000px", height: "auto" }} />
-        <div>2. (OPTIONAL) Select a Style</div>
+        <div>3. (OPTIONAL) Select a Style</div>
         <img alt = "" src={image2} style={{ width: "1000px", height: "auto" }} />
         <div>
-          3. The chosen style will be showcased in the prompt textbox, and you
+          4. The chosen style will be showcased in the prompt textbox, and you
           can continue composing the prompt with each new element separated by a
           comma (,).
         </div>
         <img alt = "" src={image3} style={{ width: "700px", height: "auto" }} />
         <div>
-          4. (OPTIONAL) You can adjust the importance of each element by adding
+          5. (OPTIONAL) You can adjust the importance of each element by adding
           a plus sign (+) to increase its weight or a minus sign (-) to reduce
           it. If it is a sentence, you can enclose the entire sentence or
           specific words within parentheses to indicate their weight is for
@@ -46,7 +55,7 @@ const QuickGuide = () => {
         <img alt = "" src={image4} style={{ width: "700px", height: "auto" }} />
         <div>
           <p>
-            5. (OPTIONAL) The range of guidance scales spans from 1 to 30. These
+            6. (OPTIONAL) The range of guidance scales spans from 1 to 30. These
             scales influence how the model interprets and adheres to the given
             prompt, determining the level of strictness with which it follows
             instructions.
@@ -70,7 +79,7 @@ const QuickGuide = () => {
         </div>
         <img alt = "" src={guidanceScale} style={{ width: "400px", height: "auto" }} />
         <div>
-          6. (OPTIONAL) Sampling steps define the number of refinements applied
+          7. (OPTIONAL) Sampling steps define the number of refinements applied
           to random noise for image transformation. Higher sampling steps result
           in longer processing times per image, requiring increased processing
           power and potentially more VRAM from the GPU. Generally, higher steps
@@ -80,7 +89,7 @@ const QuickGuide = () => {
         </div>
         <img alt = "" src={steps} style={{ width: "400px", height: "auto" }} />
         <div>
-          7. ControlNet is a neural network integrated into Stable Diffusion to
+          8. ControlNet is a neural network integrated into Stable Diffusion to
           govern image generation by incorporating additional conditions. It
           enables the specification of human poses, the replication of
           composition from other images, and the generation of similar images.
@@ -123,12 +132,12 @@ const QuickGuide = () => {
           style={{ width: "300px", height: "auto" }}
         />
         <div>
-          8. To proceed with image generation, click the "Generate" button
+          9. To proceed with image generation, click the "Generate" button
           located at the bottom of the page.
         </div>
         <img alt = "" src={generate} style={{ width: "400px", height: "auto" }} />
         <div>
-          9. The generated image will be displayed in the output banner.
+          10. The generated image will be displayed in the output banner.
         </div>
         <img alt = "" src={output} style={{ width: "400px", height: "auto" }} />
       </div>

@@ -95,7 +95,8 @@ const App = () => {
       <div style={{ minWidth: "1000px" }}>
         <br />
         <Row>
-          <ButtonGroup>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <ButtonGroup style={{ width: '500px'}}>
             {radios.map((radio, idx) => (
               <ToggleButton
                 key={idx}
@@ -110,7 +111,7 @@ const App = () => {
                 {radio.name}
               </ToggleButton>
             ))}
-          </ButtonGroup>
+          </ButtonGroup></div>
           <Link
             to="/quick-guide"
             target="_blank"

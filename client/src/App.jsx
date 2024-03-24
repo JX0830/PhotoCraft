@@ -61,7 +61,7 @@ const App = () => {
       width: 512,
       guidance_scale: 7,
       steps: 50,
-      controlNetOption: "OpenPose",
+      controlNetOption: "Canny",
       model_id: 1,
     },
     validationSchema: validationSchema,
@@ -88,45 +88,60 @@ const App = () => {
   const updateModelId = async (id) => {
     setRadioValue(id);
     formik.setFieldValue("model_id", id);
+    formik.setFieldValue("controlNetOption", "Canny");
   };
 
   return (
     <Container>
+      <div style={{ textAlign: 'center' }}>
+  <h1>PhotoCraft</h1>
+</div>
       <div style={{ minWidth: "1000px" }}>
         <br />
         <Row>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-    <ButtonGroup style={{ width: '500px'}}>
-      {radios.map((radio, idx) => (
-        <ToggleButton
-          key={idx}
-          id={`radio-${idx}`}
-          type="radio"
-          variant={"outline-light"}
-          name="radio"
-          value={radio.value}
-          checked={radioValue === radio.value}
-          onChange={(e) => updateModelId(e.currentTarget.value)}
-        >
-          {radio.name}
-        </ToggleButton>
-      ))}
-    </ButtonGroup>
-  </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flex: 1,
+              }}
+            >
+              <ButtonGroup style={{ width: "500px" }}>
+                {radios.map((radio, idx) => (
+                  <ToggleButton
+                    key={idx}
+                    id={`radio-${idx}`}
+                    type="radio"
+                    variant={"outline-light"}
+                    name="radio"
+                    value={radio.value}
+                    checked={radioValue === radio.value}
+                    onChange={(e) => updateModelId(e.currentTarget.value)}
+                  >
+                    {radio.name}
+                  </ToggleButton>
+                ))}
+              </ButtonGroup>
+            </div>
 
-  <div>
-    <Link
-      to="/quick-guide"
-      target="_blank"
-      style={{ width: 200, textAlign: 'right' }}
-    >
-      <Button>Quick Guide</Button>
-    </Link>
-  </div>
-</div>
-
-
+            <div>
+              <Link
+                to="/quick-guide"
+                target="_blank"
+                style={{ width: 200, textAlign: "right" }}
+              >
+                <Button>Quick Guide</Button>
+              </Link>
+            </div>
+          </div>
         </Row>
         <Row className="mb-3">
           <ImageBanner

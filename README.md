@@ -1,2 +1,2 @@
-# SD-UI
+# PhotoCraft
 FYP-Stable Diffusion WebUI Design

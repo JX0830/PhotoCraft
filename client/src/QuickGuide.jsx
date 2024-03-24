@@ -23,7 +23,7 @@ const QuickGuide = () => {
         {/* Add pl-2 class for left padding */}
         <h1 className="text-center">QUICK GUIDE</h1>
         <div>
-          PhotoCraft offers a user-friendly experience where users can simply
+          PhotoCraft offers a user-friendly experience where users can simply 
           input a prompt and press "Generate." However, for those seeking a more
           enhanced experience, the following steps are recommended:
         </div>

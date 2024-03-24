@@ -44,7 +44,7 @@ const App = () => {
   const [radioValue, setRadioValue] = useState("1");
 
   const radios = [
-    { name: "Stable Diffusion", value: "1" },
+    { name: "Stable Diffusion V1.5", value: "1" },
     { name: "Stable Diffusion XL", value: "2" },
   ];
   const importAll = (r) => r.keys().map(r);
@@ -93,9 +93,10 @@ const App = () => {
 
   return (
     <Container>
-      <div style={{ textAlign: 'center' }}>
+<div style={{ textAlign: 'center', paddingTop: '10px' }}>
   <h1>PhotoCraft</h1>
 </div>
+
       <div style={{ minWidth: "1000px" }}>
         <br />
         <Row>

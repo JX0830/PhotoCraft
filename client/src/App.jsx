@@ -95,30 +95,38 @@ const App = () => {
       <div style={{ minWidth: "1000px" }}>
         <br />
         <Row>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <ButtonGroup style={{ width: '500px'}}>
-            {radios.map((radio, idx) => (
-              <ToggleButton
-                key={idx}
-                id={`radio-${idx}`}
-                type="radio"
-                variant={"outline-light"}
-                name="radio"
-                value={radio.value}
-                checked={radioValue === radio.value}
-                onChange={(e) => updateModelId(e.currentTarget.value)}
-              >
-                {radio.name}
-              </ToggleButton>
-            ))}
-          </ButtonGroup></div>
-          <Link
-            to="/quick-guide"
-            target="_blank"
-            style={{ position: "absolute", top: 30, right: 20, width: 200 }}
-          >
-            <Button>Quick Guide</Button>
-          </Link>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+    <ButtonGroup style={{ width: '500px'}}>
+      {radios.map((radio, idx) => (
+        <ToggleButton
+          key={idx}
+          id={`radio-${idx}`}
+          type="radio"
+          variant={"outline-light"}
+          name="radio"
+          value={radio.value}
+          checked={radioValue === radio.value}
+          onChange={(e) => updateModelId(e.currentTarget.value)}
+        >
+          {radio.name}
+        </ToggleButton>
+      ))}
+    </ButtonGroup>
+  </div>
+
+  <div>
+    <Link
+      to="/quick-guide"
+      target="_blank"
+      style={{ width: 200, textAlign: 'right' }}
+    >
+      <Button>Quick Guide</Button>
+    </Link>
+  </div>
+</div>
+
+
         </Row>
         <Row className="mb-3">
           <ImageBanner

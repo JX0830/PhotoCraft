@@ -213,7 +213,7 @@ const App = () => {
                       value={formik.values.guidance_scale}
                       width={"100px"}
                       min={1}
-                      max={30}
+                      max={20}
                     />
                   </Form.Group>
                 </Col>
@@ -227,6 +227,7 @@ const App = () => {
                       value={formik.values.steps}
                       width={"100px"}
                       min={1}
+                      max={150}
                     />
                   </Form.Group>
                 </Col>

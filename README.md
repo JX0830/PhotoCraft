@@ -1,6 +1,5 @@
 # PhotoCraft UI
 A web interface for Stable Diffusion, implemented using Diffuser Pipeline.
-![](webUI.png)
 
 Prerequisites:
 - Visual Studio Code (vsCode): Download and install vsCode.

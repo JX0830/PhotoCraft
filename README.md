@@ -1,5 +1,8 @@
-# PhotoCraft UI
-A web interface for Stable Diffusion, implemented using Diffuser Pipeline.
+# PhotoCraft
+
+A customized web interface, crafted for user-friendliness and seamlessly integrated with ControlNet, implemented using the Diffuser Pipeline framework.
+
+![](webUI.png)
 
 Prerequisites:
 - Visual Studio Code (vsCode): Download and install vsCode.

@@ -4,6 +4,8 @@ A customized web interface, crafted for user-friendliness and seamlessly integra
 
 ![](webUI.png)
 
+You can find the demo video at this link: https://www.youtube.com/watch?v=wRApR8oKIP0
+
 Prerequisites:
 - Visual Studio Code (vsCode): Download and install vsCode.
 - Git: Download and install Git.
